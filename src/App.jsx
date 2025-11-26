@@ -3,7 +3,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 // ============================================
 // НАСТРОЙКА: Вставь сюда URL своего Google Apps Script
 // ============================================
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/u/0/home/projects/10OuJChXMwbhKLx2gTLUTA9YeQtlIChSUIz6g_robLmwFBrwVbxczt5MB/edit';
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzwVOoW7yukYlvLK6L-Bq7PQhjKZLOs1YAJxHpblWYDxBMwzKsxtUbbgIp7uR3sjeAF/exec';
 // ============================================
 
 // Database Hook - работает с Google Sheets
