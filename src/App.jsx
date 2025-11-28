@@ -3,7 +3,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 // ============================================
 // НАСТРОЙКА: Вставь сюда URL своего Google Apps Script
 // ============================================
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyPXSGrV5AuMVddRAum485pYWqRsRMasDzGaMbg_GLNT36Wpasa2M4_CSIBvbecBiQ/exec';  'Производство',
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyV75LRCCXpElg08HEdilFtQ7cKoVVkShtrkJFWy_hl5jG-3j-6STsXHzPVlbK21HL/exec';  'Производство',
   'Логистика',
   'IT',
   'HR / Кадры',
