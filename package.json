@@ -1,8 +1,8 @@
 {
-  "name": "ai-assessment-app",
-  "version": "1.0.0",
-  "description": "Веб-приложение для оценки потенциала ИИ-автоматизации по методологии 3×5",
+  "name": "ai-assessment-v2",
   "private": true,
+  "version": "2.0.0",
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -14,6 +14,6 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.2.1",
-    "vite": "^5.0.0"
+    "vite": "^5.0.8"
   }
 }
