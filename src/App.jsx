@@ -3,8 +3,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 // ============================================
 // НАСТРОЙКА: Вставь сюда URL своего Google Apps Script
 // ============================================
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxEI4LMxQJKulaMQN99TmZBCE_QHCZk3sGeNRybmGx6_47blgbpZBxTn-IRoTxcoyw0/exec';  'Охрана труда и безопасность',
-  'Производство',
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyPXSGrV5AuMVddRAum485pYWqRsRMasDzGaMbg_GLNT36Wpasa2M4_CSIBvbecBiQ/exec';  'Производство',
   'Логистика',
   'IT',
   'HR / Кадры',
@@ -156,7 +155,7 @@ const useDatabase = () => {
       try {
         await fetch(GOOGLE_SCRIPT_URL, {
           method: 'POST',
-          mode: 'no-cors',
+          
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ action: 'addSession', data: sessionData })
         });
@@ -179,7 +178,7 @@ const useDatabase = () => {
       try {
         await fetch(GOOGLE_SCRIPT_URL, {
           method: 'POST',
-          mode: 'no-cors',
+          
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ action: 'addProcesses', data: { processes, sessionId, participant } })
         });
