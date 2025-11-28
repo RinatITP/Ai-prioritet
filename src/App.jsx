@@ -3,8 +3,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 // ============================================
 // НАСТРОЙКА: Вставь сюда URL своего Google Apps Script
 // ============================================
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzRrZDqqMFyRKBlaRukF8Y93sj0HC02dlSKUFIClneCBbnF2bjHk3GsBxTOHQd/exec';// Списки отделов и когорт
-const DEPARTMENTS = [
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzRrZDqqMFyRKBlaRukF8Y93sj0HC02dl5KUFICIneCBbnF2bjHk3GsBxTOHQdhYohs/exec';//const DEPARTMENTS = [
   'Охрана труда и безопасность',
   'Производство',
   'Логистика',
