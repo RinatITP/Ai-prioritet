@@ -1,5 +1,22 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
+// ===================================================================
+// AI Assessment v2 - Comprehensive Refactor
+// ===================================================================
+// IMPROVEMENTS:
+// 1. ✅ Light, professional design (Google Gemini-inspired)
+// 2. ✅ Checkboxes for prioritization (3x5 criteria system)
+// 3. ✅ Hints/suggestions for all selections
+// 4. ✅ 10 departments dropdown
+// 5. ✅ Cohort/direction field for process categorization
+// 6. ✅ Clickable dashboard numbers with drill-down
+// 7. ✅ Color-differentiated cohorts on graphs
+// 8. ✅ Google Sheets integration with cohort field
+// 9. ✅ Optimized for 20+ concurrent mobile users
+// 10. ✅ Auto-calculated priority scores (0-15 scale)
+// ===================================================================
+
+
 // ============================================
 // НАСТРОЙКА: Вставь сюда URL своего Google Apps Script
 // ============================================
