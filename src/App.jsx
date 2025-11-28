@@ -3,7 +3,13 @@ import React, { useState, useEffect, useCallback } from 'react';
 // ============================================
 // НАСТРОЙКА: Вставь сюда URL своего Google Apps Script
 // ============================================
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyV75LRCCXpElg08HEdilFtQ7cKoVVkShtrkJFWy_hl5jG-3j-6STsXHzPVlbK21HL/exec';  'Производство',
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyIXxLrcQepDiQMLBkFUSRVGMLW8_u8dNU_AD4dYfJlzqwCVw7w_jMaFmRZrZbfc0d-/exec';
+// ============================================
+
+// Списки отделов и когорт
+const DEPARTMENTS = [
+  'Охрана труда и безопасность',
+  'Производство',
   'Логистика',
   'IT',
   'HR / Кадры',
@@ -101,7 +107,7 @@ const PROCESS_EXAMPLES = [
   'Сбор данных из разных источников'
 ];
 
-// Database Hook
+// Database Hook - ИСПРАВЛЕННАЯ ВЕРСИЯ с GET запросами для обхода CORS
 const useDatabase = () => {
   const [data, setData] = useState({
     sessions: [],
@@ -134,7 +140,6 @@ const useDatabase = () => {
       }
     } catch (error) {
       setData(prev => ({ ...prev, isLoading: false, error: error.message }));
-      // Fallback to localStorage
       const saved = JSON.parse(localStorage.getItem('ai_assessment_v2') || '{"sessions":[],"processes":[]}');
       setData(prev => ({ ...prev, sessions: saved.sessions, processes: saved.processes }));
     }
@@ -142,23 +147,32 @@ const useDatabase = () => {
 
   useEffect(() => { loadData(); }, []);
 
+  // Сохранение сессии через GET (обход CORS)
   const saveSession = async (sessionData) => {
     const sessionId = Date.now().toString();
     const newSession = { ...sessionData, id: sessionId, createdAt: new Date().toISOString() };
     
-    // Always save to localStorage as backup
+    // Сохраняем в localStorage как бэкап
     const saved = JSON.parse(localStorage.getItem('ai_assessment_v2') || '{"sessions":[],"processes":[]}');
     saved.sessions.push(newSession);
     localStorage.setItem('ai_assessment_v2', JSON.stringify(saved));
 
     if (data.isConfigured) {
       try {
-        await fetch(GOOGLE_SCRIPT_URL, {
-          method: 'POST',
-          
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'addSession', data: sessionData })
+        // Используем GET запрос с параметрами (работает с CORS)
+        const params = new URLSearchParams({
+          action: 'addSession',
+          name: sessionData.name || '',
+          role: sessionData.role || '',
+          department: sessionData.department || '',
+          company: sessionData.company || ''
         });
+        
+        // Создаём Image для отправки GET запроса (гарантированно работает)
+        const img = new Image();
+        img.src = `${GOOGLE_SCRIPT_URL}?${params.toString()}`;
+        
+        console.log('Session save request sent:', sessionId);
       } catch (error) {
         console.error('Ошибка сохранения сессии:', error);
       }
@@ -166,8 +180,9 @@ const useDatabase = () => {
     return sessionId;
   };
 
+  // Сохранение процессов через GET (обход CORS)
   const saveProcesses = async (processes, sessionId, participant) => {
-    // Save to localStorage
+    // Сохраняем в localStorage
     const saved = JSON.parse(localStorage.getItem('ai_assessment_v2') || '{"sessions":[],"processes":[]}');
     processes.forEach(p => {
       saved.processes.push({ ...p, sessionId, participant, savedAt: new Date().toISOString() });
@@ -175,18 +190,43 @@ const useDatabase = () => {
     localStorage.setItem('ai_assessment_v2', JSON.stringify(saved));
 
     if (data.isConfigured) {
-      try {
-        await fetch(GOOGLE_SCRIPT_URL, {
-          method: 'POST',
+      // Отправляем каждый процесс отдельным GET запросом
+      for (const p of processes) {
+        try {
+          const params = new URLSearchParams({
+            action: 'addProcess',
+            sessionId: sessionId,
+            participantName: participant.name || '',
+            participantDept: participant.department || '',
+            participantCompany: participant.company || '',
+            processName: p.name || '',
+            cohort: p.cohort || '',
+            frequent: p.frequent ? 'true' : 'false',
+            long: p.long ? 'true' : 'false',
+            template: p.template ? 'true' : 'false',
+            automationType: p.automationType || '',
+            idea: encodeURIComponent(p.idea || ''),
+            valueScore: (p.valueScore || 0).toString(),
+            feasibilityScore: (p.feasibilityScore || 0).toString(),
+            aiScore: (p.aiScore || 0).toString()
+          });
           
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'addProcesses', data: { processes, sessionId, participant } })
-        });
-      } catch (error) {
-        console.error('Ошибка сохранения процессов:', error);
+          // Используем Image для GET запроса
+          const img = new Image();
+          img.src = `${GOOGLE_SCRIPT_URL}?${params.toString()}`;
+          
+          console.log('Process save request sent:', p.name);
+          
+          // Небольшая задержка между запросами
+          await new Promise(resolve => setTimeout(resolve, 300));
+        } catch (error) {
+          console.error('Ошибка сохранения процесса:', error);
+        }
       }
     }
-    setTimeout(() => loadData(), 1500);
+    
+    // Обновляем данные через 2 секунды
+    setTimeout(() => loadData(), 2000);
   };
 
   return { data, saveSession, saveProcesses, loadData, isConfigured: data.isConfigured };
